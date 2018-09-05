@@ -11,7 +11,12 @@
 /* ************************************************************************** */
 
 #ifndef WOLF_H
+# define WOLF_H
 
-#include <mlx.h>
+# include "mlx.h"
+
+# define WINWIDTH 640
+# define WINHEIGHT 420
+
 
 #endif
