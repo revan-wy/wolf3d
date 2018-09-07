@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:49:45 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/07 11:50:00 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 12:13:05 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,26 @@ int key_event(int key_code, void **param)
 		exit(0);
 	return (1);
 }
-/*
+
 void vert_line(int x, int drawStart, int drawEnd, int colour, void *gsci, void *win)
 {
+	//static old;
+	
 	while (drawStart <= drawEnd)
 	{
 		mlx_pixel_put(gsci, win, x, drawStart++, colour);
+		//ft_putnbr(colour);
+		//ft_putchar('\n');
 	}
 }
 
 void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 {
 	int x;
-	
+	int colour; 
+
 	x = 0;
+	//colour = 0x00FF0000;
 	while (x < WINWIDTH)
 	{
 		double posX = 22, posY = 12; //x and y start position
@@ -113,14 +119,13 @@ void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 		if (drawEnd >= WINHEIGHT) drawEnd = WINHEIGHT - 1;
 		//choose wall color
 		
-		int colour; //build colour chooser
-		
+		//build colour chooser
 		//if (worldMap[mapX][mapY] == 1)
 			colour = 0x00FF0000;
 		//else if 
 		
 		
-		ColorRGB color;
+		/*ColorRGB color;
 		switch(worldMap[mapX][mapY])
 		{
 			case 1:  color = RGB_Red;  break; //red
@@ -128,7 +133,7 @@ void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 			case 3:  color = RGB_Blue;   break; //blue
 			case 4:  color = RGB_White;  break; //white
 			default: color = RGB_Yellow; break; //yellow
-		}*//*
+		}*/
 		
 		
 		//give x and y sides different brightness
@@ -139,7 +144,7 @@ void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 		x++;
 	}
 }
-*/
+
 int	main()
 {
 	void *gsci;
@@ -150,7 +155,7 @@ int	main()
 	
 	
 
-	/*int worldMap[MAPWIDTH][MAPHEIGHT]=
+	int worldMap[MAPWIDTH][MAPHEIGHT]=
 	{
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -176,9 +181,9 @@ int	main()
 	{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-	};*/
+	};
 	
-	//draw_screen(worldMap, gsci, win);
+	draw_screen(worldMap, gsci, win);
 
 	//while(1);
 		

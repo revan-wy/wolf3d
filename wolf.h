@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:50:27 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/06 22:20:07 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 12:04:28 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "mlx.h"
 # include <stdlib.h>
 # include <math.h>
+# include <stdio.h> //forbidden lib
+# include "libft.h"
 
 # define WINWIDTH 640
 # define WINHEIGHT 420
