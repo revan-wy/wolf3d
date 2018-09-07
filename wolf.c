@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:49:45 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/07 12:13:05 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 12:20:38 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ int key_event(int key_code, void **param)
 {
 	param = 0;
 	
+	
+	/*up 126
+	down 125
+	left 123
+	right 124*/
+	
+	ft_putnbr(key_code);
+	ft_putchar('\n');
 	if (key_code == 53)
 		exit(0);
 	return (1);
