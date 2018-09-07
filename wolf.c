@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:49:45 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/07 12:20:38 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 15:07:13 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ int key_event(int key_code, void **param)
 {
 	param = 0;
 	
-	
-	/*up 126
-	down 125
-	left 123
-	right 124*/
-	
-	ft_putnbr(key_code);
-	ft_putchar('\n');
-	if (key_code == 53)
+	if (key_code == UP_ARROW)
+		update_pos_up_arrow();
+	else if (key_code == DOWN_ARROW)
+		update_pos_down_arrow();
+	else if (key_code == LEFT_ARROW)
+		update_rot_left_arrow();
+	else if (key_code == RIGHT_ARROW)
+		update_rot_right_arrow();
+	else if (key_code == ESCAPE_KEY)
 		exit(0);
 	return (1);
 }
@@ -46,6 +46,7 @@ void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 	int x;
 	int colour; 
 
+	mlx_clear_window(gsci, win);
 	x = 0;
 	//colour = 0x00FF0000;
 	while (x < WINWIDTH)
