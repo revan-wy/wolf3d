@@ -6,25 +6,31 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:49:45 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/07 15:07:13 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 15:55:45 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int key_event(int key_code, void **param)
+void update_pos_up_arrow(t_data *data)
 {
-	param = 0;
-	
+	if(!data->worldMap[(int)(data->posX + data->dirX * MOVE_SPEED)][(int)(data->posY)]) 
+	  	data->posX += data->dirX * MOVE_SPEED;
+	if(!data->worldMap[(int)(data->posX)][(int)(data->posY + data->dirY * MOVE_SPEED)]) 
+		data->posY += data->dirY * MOVE_SPEED;
+}
+
+int key_event(int key_code, void **data)
+{
 	if (key_code == UP_ARROW)
-		update_pos_up_arrow();
-	else if (key_code == DOWN_ARROW)
+		update_pos_up_arrow(*data);
+	/*else if (key_code == DOWN_ARROW)
 		update_pos_down_arrow();
 	else if (key_code == LEFT_ARROW)
 		update_rot_left_arrow();
 	else if (key_code == RIGHT_ARROW)
-		update_rot_right_arrow();
-	else if (key_code == ESCAPE_KEY)
+		update_rot_right_arrow();*/
+	if (key_code == ESCAPE_KEY)
 		exit(0);
 	return (1);
 }
@@ -41,7 +47,7 @@ void vert_line(int x, int drawStart, int drawEnd, int colour, void *gsci, void *
 	}
 }
 
-void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
+void	draw_screen(t_data *data, void *gsci, void *win)
 {
 	int x;
 	int colour; 
@@ -51,11 +57,13 @@ void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 	//colour = 0x00FF0000;
 	while (x < WINWIDTH)
 	{
-		double posX = 22, posY = 12; //x and y start position
-		double dirX = -1, dirY = 0;  //initial direction vector
+		data->posX = 22; 
+		data->posY = 12; //x and y start position
+		data->dirX = -1; 
+		data->dirY = 0;  //initial direction vector
 		double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 		double cameraX = 2 * x / WINWIDTH - 1; //x-coordinate in camera space
-		double rayPosX = posX;
+		double rayPosX = data->posX;
 		double rayPosY = posY;
 		double rayDirX = dirX + planeX * cameraX;
 		double rayDirY = dirY + planeY * cameraX;
@@ -158,13 +166,14 @@ int	main()
 {
 	void *gsci;
 	void *win;
+	t_data data;
 
 	gsci = mlx_init();
 	win = mlx_new_window(gsci, WINWIDTH, WINHEIGHT, "#MAKEMEHOWL");
 	
 	
 
-	int worldMap[MAPWIDTH][MAPHEIGHT]=
+	data.worldMap[MAPWIDTH][MAPHEIGHT]=
 	{
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -192,11 +201,11 @@ int	main()
 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
 	
-	draw_screen(worldMap, gsci, win);
+	draw_screen(&data, gsci, win);
 
 	//while(1);
 		
 	//draw screen //this will be the initial starting view of the camera
-	mlx_key_hook(win, key_event, 0);
+	mlx_key_hook(win, key_event, data);
 	mlx_loop(gsci);
 }
