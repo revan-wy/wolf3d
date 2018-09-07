@@ -6,13 +6,13 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:49:45 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/06 22:52:26 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 11:46:54 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-/*int key_event(int key_code, void **param)
+int key_event(int key_code, void **param)
 {
 	param = 0;
 	
@@ -20,7 +20,7 @@
 		exit(0);
 	return (1);
 }
-
+/*
 void vert_line(int x, int drawStart, int drawEnd, int colour, void *gsci, void *win)
 {
 	while (drawStart <= drawEnd)
@@ -142,11 +142,11 @@ void	draw_screen(int worldMap[MAPWIDTH][MAPHEIGHT], void *gsci, void *win)
 */
 int	main()
 {
-	//void *gsci;
-	//void *win;
+	void *gsci;
+	void *win;
 
-	//gsci = mlx_init();
-	//win = mlx_new_window(gsci, 2560, 1315, "#MAKEMEHOWL");
+	gsci = mlx_init();
+	win = mlx_new_window(gsci, 2560, 1315, "#MAKEMEHOWL");
 	
 	
 
@@ -180,9 +180,9 @@ int	main()
 	
 	//draw_screen(worldMap, gsci, win);
 
-	while(1);
+	//while(1);
 		
 	//draw screen //this will be the initial starting view of the camera
-	//mlx_key_hook(win, key_event, 0);
-	//mlx_loop(gsci);
+	mlx_key_hook(win, key_event, 0);
+	mlx_loop(gsci);
 }

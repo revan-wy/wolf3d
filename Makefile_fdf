@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    Makefile_fdf                                       :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/07 23:03:34 by revan-wy          #+#    #+#              #
-#    Updated: 2018/09/06 22:31:02 by revan-wy         ###   ########.fr        #
+#    Updated: 2018/09/07 11:05:31 by revan-wy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJ := $(SRC:%.c=%.o)
 all: $(NAME)
 
 makelibft:
-	make -C ./libft
+	make -C libft/
 
 $(NAME): makelibft $(OBJ)
 	$(COMP) $(OBJ) $(LIBS) -o $(NAME) $(FRAMEWORK)

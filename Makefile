@@ -5,16 +5,16 @@
 #                                                     +:+ +:+         +:+      #
 #    By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/08/07 23:03:34 by revan-wy          #+#    #+#              #
-#    Updated: 2018/09/06 22:31:02 by revan-wy         ###   ########.fr        #
+#    Created: 2018/08/28 19:12:59 by revan-wy          #+#    #+#              #
+#    Updated: 2018/09/07 11:07:54 by revan-wy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = fdf
+NAME = wolf
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 COMP = $(CC) $(FLAGS)
-FDF_H = -I ./
+#INCL = -I ./
 FRAMEWORK = -framework OpenGL \
 			-framework AppKit
 LIBFT_H = -I ./libft/
@@ -27,18 +27,26 @@ OBJ := $(SRC:%.c=%.o)
 all: $(NAME)
 
 makelibft:
-	make -C ./libft
+	make -C libft/
 
 $(NAME): makelibft $(OBJ)
-	$(COMP) $(OBJ) $(LIBS) -o $(NAME) $(FRAMEWORK)
+	$(CC) $(WFLAGS) $(OBJ) $(LIBS) -o $(NAME) $(FRAMEWORK)
 
 %.o: %.c
-	$(COMP) -c $< $(LIBFT_H) $(FDF_H) -o $@
+	$(COMP) -c $< $(LIBFT_H) $(WOLF3D_H) -o $@ $(INCL)
 
-clean:
+clean: 
 	rm -f $(OBJ)
+	make -C libft/ clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C libft/ fclean
 
 re: fclean all
+
+#to compile object file use:
+#	gcc -c -Wall -Werror -Wextra wolf.c
+
+#to compile executable use:
+#

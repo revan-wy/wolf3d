@@ -65,3 +65,4 @@ libft/ft_tolower.o
 libft/ft_toupper.o
 libft/ft_xttpy.o
 libft/get_next_line.o
+wolf.o
