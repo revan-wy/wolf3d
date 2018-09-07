@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:49:45 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/07 11:46:54 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/07 11:50:00 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	main()
 	void *win;
 
 	gsci = mlx_init();
-	win = mlx_new_window(gsci, 2560, 1315, "#MAKEMEHOWL");
+	win = mlx_new_window(gsci, WINWIDTH, WINHEIGHT, "#MAKEMEHOWL");
 	
 	
 
