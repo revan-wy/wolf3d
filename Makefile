@@ -6,7 +6,7 @@
 #    By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/28 19:12:59 by revan-wy          #+#    #+#              #
-#    Updated: 2018/09/07 11:07:54 by revan-wy         ###   ########.fr        #
+#    Updated: 2018/09/07 18:13:55 by revan-wy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,10 +30,10 @@ makelibft:
 	make -C libft/
 
 $(NAME): makelibft $(OBJ)
-	$(CC) $(WFLAGS) $(OBJ) $(LIBS) -o $(NAME) $(FRAMEWORK)
+	$(CC) -g $(WFLAGS) $(OBJ) $(LIBS) -o $(NAME) $(FRAMEWORK)
 
 %.o: %.c
-	$(COMP) -c $< $(LIBFT_H) $(WOLF3D_H) -o $@ $(INCL)
+	$(COMP) -g -c $< $(LIBFT_H) $(WOLF3D_H) -o $@ $(INCL)
 
 clean: 
 	rm -f $(OBJ)

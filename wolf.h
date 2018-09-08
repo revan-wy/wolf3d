@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/03 17:50:27 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/07 15:52:26 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/08 13:50:19 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,17 @@
 # define LEFT_ARROW 123
 # define RIGHT_ARROW 124
 # define ESCAPE_KEY 53
-# define MOVE_SPEED 5
+# define MOVE_SPEED 1
 
 typedef struct  s_data
 {
-    int worldMap[MAPWIDTH][MAPHEIGHT];
+    //int worldMap[MAPWIDTH][MAPHEIGHT];
     double dirX;
     double posX;
     double posY;
     double dirY;
+    void *gsci;
+    void *win;
 }               t_data;
 
 	/*up 126
