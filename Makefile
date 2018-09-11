@@ -1,30 +1,52 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/08/28 19:12:59 by revan-wy          #+#    #+#              #
+#    Updated: 2018/09/11 18:33:52 by revan-wy         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CC=g++
-CFLAGS=-c
-LFLAGS=-framework SDL2 -F ~/Library/Frameworks
-IFLAGS=-I ~/.brew/include
-FLAGS= $(CFLAGS) $(LFLAGS)
-SRC=source/
-BUILD=build/
-OBJECTS= $(BUILD)main.o $(BUILD)instantcg.o
+NAME = wolf
+CC = gcc
+FLAGS = -Wall -Wextra -Werror
+COMP = $(CC) $(FLAGS)
+#INCL = -I ./
+FRAMEWORK = -framework OpenGL \
+			-framework AppKit
+LIBFT_H = -I ./libft/
+LIBS = -L./libft -lft \
+	   -lmlx
+SRC = wolf.c
 
-# compile and link the whole project
-all: build link
+OBJ := $(SRC:%.c=%.o)
 
-# compile only
-build: main.o instantcg.o
+all: $(NAME)
 
-# link objects
-link:
-	$(CC) $(OBJECTS) $(LFLAGS) -o rayCaster.out
+makelibft:
+	make -C libft/
 
-clean:
-	rm -rf *.o *.out
+$(NAME): makelibft $(OBJ)
+	$(CC) -g $(WFLAGS) $(OBJ) $(LIBS) -o $(NAME) $(FRAMEWORK)
 
-# compile individual files
-main.o: $(SRC)main.cpp
-	$(CC) $(CFLAGS) $(SRC)main.cpp -o $(BUILD)main.o $(IFLAGS)
+%.o: %.c
+	$(COMP) -g -c $< $(LIBFT_H) $(WOLF3D_H) -o $@ $(INCL)
 
-# compile InstantCG as an .o file
-instantcg.o:
-	$(CC) $(CFLAGS) $(SRC)instantcg.cpp -o $(BUILD)instantcg.o $(IFLAGS)
+clean: 
+	rm -f $(OBJ)
+	make -C libft/ clean
+
+fclean: clean
+	rm -f $(NAME)
+	make -C libft/ fclean
+
+re: fclean all
+
+#to compile object file use:
+#	gcc -c -Wall -Werror -Wextra wolf.c
+
+#to compile executable use:
+#

@@ -1,0 +1,6 @@
+types used by lodeV
+            sizeof
+double      8
+int         4
+float       4
+pointers    8
