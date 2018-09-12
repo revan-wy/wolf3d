@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 09:51:43 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/12 21:15:56 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/12 21:20:10 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int main()
 	data->x = 0;
 	while(data->x < win_width)
 	{
-		data->cameraX = 2 * data->x / (double)win_width - 1;
+		data->cameraX = 2 * data->x / win_width - 1;
 		data->rayPosX = data->posX;
 		data->rayPosY = data->posY;
 		data->rayDirX = data->dirX + data->planeX * data->cameraX;

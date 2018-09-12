@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/09 15:09:16 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/12 18:36:46 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/12 21:20:39 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include "mlx.h"
 # include <math.h>
 
-# define win_width 640
-# define win_height 460
+# define win_width 640.0
+# define win_height 460.0
 # define mapWidth 24
 # define mapHeight 24
 
