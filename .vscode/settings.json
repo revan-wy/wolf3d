@@ -10,6 +10,8 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "__locale": "c",
-        "ios": "c"
+        "ios": "c",
+        "wolf.h": "c",
+        "mlx.h": "c"
     }
 }
