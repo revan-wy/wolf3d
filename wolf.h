@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/09 15:09:16 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/12 21:20:39 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/13 20:17:09 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 # define win_height 460.0
 # define mapWidth 24
 # define mapHeight 24
+# define up 126
+# define left 123
+# define down 125
+# define right 124
+# define moveSpeed 0.2
+# define rotSpeed 0.2
 
 typedef struct  s_data
 {
@@ -29,6 +35,8 @@ typedef struct  s_data
     double deltaDistY;
     double dirX;
     double dirY;
+    double oldDirX;
+    double oldPlaneX;
     double perpWallDist;
     double planeX;
     double planeY;
@@ -50,9 +58,11 @@ typedef struct  s_data
     int side;
     int stepX;
     int stepY;
+    //int ***worldMap;
     int x;
     void *gsci;
     void *win;
+    int *worldMap;
 }               t_data;
 
 #endif

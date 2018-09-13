@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 09:51:43 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/12 21:20:10 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/13 21:49:45 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,48 +36,9 @@ void draw_vert_line(t_data *data)
 		mlx_pixel_put(data->gsci,data->win,data->x,y++,data->colour);
 }
 
-int main()
+void draw(t_data *data)
 {
-	t_data *data;
-	int worldMap[mapWidth][mapHeight]=
-	{
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-	};
-
-	
-	data = init_t_data();
-	
-	data->posX = 22;
-	data->posY = 12;
-	data->dirX = -1;
-	data->dirY = 0;
-	data->planeX = 0;
-	data->planeY = 0.66;
-	
-	set_up_window(data);
+	mlx_clear_window(data->gsci, data->win);
 	
 	data->x = 0;
 	while(data->x < win_width)
@@ -134,7 +95,10 @@ int main()
 				data->side = 1;
 			}
 			//Check if ray has hit a wall
-			if (worldMap[data->mapX][data->mapY] > 0)
+			//*(data + i * COLS + j)
+
+			//if (worldMap[data->mapX][data->mapY] > 0)
+			if (*(data->worldMap + data->mapX * mapWidth + data->mapY))
 				data->hit = 1;
 		}
 
@@ -152,13 +116,15 @@ int main()
 		if (data->drawEnd >= win_height)
 			data->drawEnd = win_height - 1;
 
-		if (worldMap[data->mapX][data->mapY] == 1)
+		//*(data + i * COLS + j)
+		//if (worldMap[data->mapX][data->mapY] == 1)
+		if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 1)
 			data->colour = 0x00FF0000; //red
-		else if (worldMap[data->mapX][data->mapY] == 2)
+		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 2)
 			data->colour = 0x0000FF00; //green
-		else if (worldMap[data->mapX][data->mapY] == 3)
+		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 3)
 			data->colour = 0x000000FF; //blue
-		else if (worldMap[data->mapX][data->mapY] == 4)
+		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 4)
 			data->colour = 0x00FFFFFF; //white
 		else
 			data->colour = 0x00FFFF00; //yellow
@@ -172,6 +138,128 @@ int main()
 		
 		data->x++;
 	}
+
+}
+
+void update_with_up(t_data *data)
+{
+	//int *worldMap = data->worldMap;
+	//*(data + i * COLS + j)
+	//if(!*(worldMap[(int)(data->posX + data->dirX * moveSpeed)][(int)(data->posY)])
+	if (!*(data->worldMap + (int)(data->posX + data->dirX * moveSpeed) * mapWidth + (int)data->posY))	
+		data->posX += data->dirX * moveSpeed;
+	//if(!worldMap[(int)(data->posX)][(int)(data->posY + data->dirY * moveSpeed)])
+	if (!*(data->worldMap + (int)data->posX * mapWidth + (int)(data->posY + data->dirY * moveSpeed)))
+		data->posY += data->dirY * moveSpeed;
+	draw(data);
+}
+
+void update_with_left(t_data *data)
+{
+	//both camera direction and camera plane must be rotated
+	data->oldDirX = data->dirX;
+	data->dirX = data->dirX * cos(rotSpeed) - data->dirY * sin(rotSpeed);
+	data->dirY = data->oldDirX * sin(rotSpeed) + data->dirY * cos(rotSpeed);
+	data->oldPlaneX = data->planeX;
+	data->planeX = data->planeX * cos(rotSpeed) - data->planeY * sin(rotSpeed);
+	data->planeY = data->oldPlaneX * sin(rotSpeed) + data->planeY * cos(rotSpeed);
+	draw(data);
+}
+
+void update_with_down(t_data *data)
+{
+	//*(data + i * COLS + j)
+	//if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false)
+	if (*(data->worldMap + (int)(data->posX - data->dirX * moveSpeed) * mapWidth + (int)data->posY) == 0)
+		data->posX -= data->dirX * moveSpeed;
+	//if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false)
+	if (*(data->worldMap + (int)data->posX * mapWidth + (int)(data->posY - data->dirY * moveSpeed)) == 0)
+		data->posY -= data->dirY * moveSpeed;
+	draw(data);
+}
+
+void update_with_right(t_data *data)
+{
+	//both camera direction and camera plane must be rotated
+	data->oldDirX = data->dirX;
+	data->dirX = data->dirX * cos(-rotSpeed) - data->dirY * sin(-rotSpeed);
+	data->dirY = data->oldDirX * sin(-rotSpeed) + data->dirY * cos(-rotSpeed);
+	data->oldPlaneX = data->planeX;
+	data->planeX = data->planeX * cos(-rotSpeed) - data->planeY * sin(-rotSpeed);
+	data->planeY = data->oldPlaneX * sin(-rotSpeed) + data->planeY * cos(-rotSpeed);
+	draw(data);
+}
+
+int key_event(int key_code, void *data)
+{
+	if (key_code == 53)
+		exit (0);
+	else if (key_code == up)
+		update_with_up(data);
+	else if (key_code == left)
+		update_with_left(data);
+	else if (key_code == down)
+		update_with_down(data);
+	else if (key_code == right)
+		update_with_right(data);
+	return (0);
+}
+
+int exit_hook(t_data *data)
+{
+	mlx_destroy_window(data->gsci, data->win);
+	exit(0);
+}
+
+int main()
+{
+	t_data *data;
+	data = init_t_data();
+	int worldMap[mapWidth][mapHeight] =
+	{
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+	};
+	
+	data->worldMap = &worldMap[0][0];
+
+	
+	
+	data->posX = 22;
+	data->posY = 12;
+	data->dirX = -1;
+	data->dirY = 0;
+	data->planeX = 0;
+	data->planeY = 0.66;
+	
+	set_up_window(data);
+	
+	draw(data);
+	
+	mlx_key_hook(data->win, key_event, data);
+	mlx_hook(data->win, 17, 0, exit_hook, data);
 	mlx_loop(data->gsci);
 	return (0);
 	

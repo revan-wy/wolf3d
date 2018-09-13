@@ -76,3 +76,4 @@ README.md
 .DS_Store
 wolf.o
 wolf
+test/2d_int_via_ptr/a.out
