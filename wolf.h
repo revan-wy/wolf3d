@@ -17,16 +17,16 @@
 # include "mlx.h"
 # include <math.h>
 
-# define win_width 640.0
-# define win_height 460.0
-# define mapWidth 24
-# define mapHeight 24
-# define up 126
-# define left 123
-# define down 125
-# define right 124
-# define moveSpeed 0.2
-# define rotSpeed 0.2
+# define WIN_WIDTH 640.0
+# define WIN_HEIGHT 460.0
+# define MAPWIDTH 24
+# define MAPHEIGHT 24
+# define UP 126
+# define LEFT 123
+# define DOWN 125
+# define RIGHT 124
+# define MOVESPEED 0.2
+# define ROTSPEED 0.1
 
 typedef struct  s_data
 {
@@ -58,11 +58,10 @@ typedef struct  s_data
     int side;
     int stepX;
     int stepY;
-    //int ***worldMap;
+    int *worldMap;
     int x;
     void *gsci;
     void *win;
-    int *worldMap;
 }               t_data;
 
 #endif

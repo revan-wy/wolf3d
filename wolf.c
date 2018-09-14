@@ -11,17 +11,16 @@
 /* ************************************************************************** */
 
 #include "wolf.h"
-#include <stdio.h> //forbidden header file
 
-t_data *init_t_data()
+t_data	*init_t_data(void)
 {
 	t_data *ret;
-	
+
 	ret = ft_memalloc(sizeof(t_data));
 	return (ret);
 }
 
-void set_up_window(t_data *data)
+void	set_up_window(t_data *data)
 {
 	data->gsci = mlx_init();
 	data->win = mlx_new_window(data->gsci, win_width, win_height, "#makemehowl");
@@ -48,7 +47,7 @@ void draw(t_data *data)
 		data->rayPosY = data->posY;
 		data->rayDirX = data->dirX + data->planeX * data->cameraX;
 		data->rayDirY = data->dirY + data->planeY * data->cameraX;
-		printf("%f\n", data->cameraX);
+		//printf("%f\n", data->cameraX);
 		
 		data->mapX = data->rayPosX;
 		data->mapY = data->rayPosY;
@@ -118,22 +117,65 @@ void draw(t_data *data)
 
 		//*(data + i * COLS + j)
 		//if (worldMap[data->mapX][data->mapY] == 1)
-		if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 1)
-			data->colour = 0x00FF0000; //red
-		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 2)
-			data->colour = 0x0000FF00; //green
-		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 3)
-			data->colour = 0x000000FF; //blue
-		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 4)
-			data->colour = 0x00FFFFFF; //white
+		printf("[%f %f]", data->rayDirX, data->rayDirY);
+		
+		if (data->side)
+		{
+			if (data->rayDirY < 0)
+				data->colour = 0x00FF0000; //red
+			else
+				data->colour = 0x000000FF; //blue
+		}
 		else
+		{
+			if (data->rayDirX < 0)
+				data->colour = 0x00FFFF00; //yellow
+			else
+				data->colour = 0x0000FF00; //green
+		}
+
+		/*if (data->side && data->rayDirY < 0)
+			data->colour = 0x00FF0000; //red
+		else if (data->side && data->rayDirY > 0)
+			data->colour = 0x000000FF; //blue
+		else if (!data->side && data->rayDirX < 0)
 			data->colour = 0x00FFFF00; //yellow
+		else if (!data->side && data->rayDirX > 0)
+			data->colour = 0x0000FF00; //green*/
+		
+		/*if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 1)
+		{
+			//while(1);
+			data->colour = 0x00FF0000; //red
+		}
+		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 2)
+		{
+			//while(1);
+			data->colour = 0x0000FF00; //green
+			//if (data->x == 77) while(1);
+		}
+		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 3)
+		{
+			//while(1);
+			data->colour = 0x000000FF; //blue
+		}
+		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 4)
+		{
+			//while(1);
+			data->colour = 0x00FFFFFF; //white
+		}
+		else
+		{
+			//while(1);
+			data->colour = 0x00FFFF00; //yellow
+		}
 		
 		if (data->side == 1)
-			data->colour = data->colour / 2;
+			data->colour = data->colour / 2;*/
 
 		draw_vert_line(data);
 
+		//if (data->x == 77) break;
 
 		
 		data->x++;
@@ -258,7 +300,8 @@ int main()
 	
 	draw(data);
 	
-	mlx_key_hook(data->win, key_event, data);
+//	mlx_key_hook(data->win, key_event, data);
+	mlx_hook(data->win, 2, 0, key_event, data);
 	mlx_hook(data->win, 17, 0, exit_hook, data);
 	mlx_loop(data->gsci);
 	return (0);
