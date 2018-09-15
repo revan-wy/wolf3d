@@ -16,5 +16,7 @@
         "iterator": "c",
         "string": "c",
         "string_view": "c"
-    }
+    },
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": false
 }

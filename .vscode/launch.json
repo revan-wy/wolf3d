@@ -10,7 +10,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/wolf",
-            "args": [],
+            "args": ["test_maps/classic.map"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

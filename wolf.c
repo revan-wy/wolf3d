@@ -6,304 +6,317 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 09:51:43 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/13 21:49:45 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/15 22:13:08 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-t_data	*init_t_data(void)
-{
-	t_data *ret;
-
-	ret = ft_memalloc(sizeof(t_data));
-	return (ret);
-}
-
 void	set_up_window(t_data *data)
 {
 	data->gsci = mlx_init();
-	data->win = mlx_new_window(data->gsci, win_width, win_height, "#makemehowl");
+	data->win = mlx_new_window(data->gsci, WIN_WIDTH, WIN_HEIGHT,
+			"#hearmehowl");
 }
 
-void draw_vert_line(t_data *data)
+void	draw_vert_line(t_data *data)
 {
 	int y;
-	
-	y = data->drawStart;
-	while (y <= data->drawEnd)
-		mlx_pixel_put(data->gsci,data->win,data->x,y++,data->colour);
+
+	y = data->drawstart;
+	while (y <= data->drawend)
+		mlx_pixel_put(data->gsci, data->win, data->x, y++, data->colour);
 }
 
-void draw(t_data *data)
+void	calc_ray_termination_location(t_data *data)
+{
+	while (data->hit == 0)
+	{
+		if (data->sidedistx < data->sidedisty)
+		{
+			data->sidedistx += data->deltadistx;
+			data->mapx += data->stepx;
+			data->side = 0;
+		}
+		else
+		{
+			data->sidedisty += data->deltadisty;
+			data->mapy += data->stepy;
+			data->side = 1;
+		}
+		if (*(data->worldmap + data->mapx * data->colmax + data->mapy))
+			data->hit = 1;
+	}
+}
+
+void	colour_picker(t_data *data)
+{
+	if (data->side)
+	{
+		if (data->raydiry < 0)
+			data->colour = 0x00FF0000;
+		else
+			data->colour = 0x000000FF;
+	}
+	else
+	{
+		if (data->raydirx < 0)
+			data->colour = 0x00FFFF00;
+		else
+			data->colour = 0x0000FF00;
+	}
+}
+
+void	calc_pre_cast_values(t_data *data)
+{
+	if (data->raydirx < 0)
+	{
+		data->stepx = -1;
+		data->sidedistx = (data->rayposx - data->mapx) * data->deltadistx;
+	}
+	else
+	{
+		data->stepx = 1;
+		data->sidedistx = (data->mapx + 1.0 - data->rayposx) *
+				data->deltadistx;
+	}
+	if (data->raydiry < 0)
+	{
+		data->stepy = -1;
+		data->sidedisty = (data->rayposy - data->mapy) * data->deltadisty;
+	}
+	else
+	{
+		data->stepy = 1;
+		data->sidedisty = (data->mapy + 1.0 - data->rayposy) *
+				data->deltadisty;
+	}
+}
+
+void	calc_ray_termination_distance_and_wall_size(t_data *data)
+{
+	if (data->side == 0)
+		data->perpwalldist = fabs((data->mapx - data->rayposx +
+				(1 - data->stepx) / 2) / data->raydirx);
+	else
+		data->perpwalldist = fabs((data->mapy - data->rayposy +
+				(1 - data->stepy) / 2) / data->raydiry);
+	data->lineheight = fabs(WIN_HEIGHT / data->perpwalldist);
+	data->drawstart = -data->lineheight / 2 + WIN_HEIGHT / 2;
+	if (data->drawstart < 0)
+		data->drawstart = 0;
+	data->drawend = data->lineheight / 2 + WIN_HEIGHT / 2;
+	if (data->drawend >= WIN_HEIGHT)
+		data->drawend = WIN_HEIGHT - 1;
+}
+
+void	draw(t_data *data)
 {
 	mlx_clear_window(data->gsci, data->win);
-	
 	data->x = 0;
-	while(data->x < win_width)
+	while (data->x < WIN_WIDTH)
 	{
-		data->cameraX = 2 * data->x / win_width - 1;
-		data->rayPosX = data->posX;
-		data->rayPosY = data->posY;
-		data->rayDirX = data->dirX + data->planeX * data->cameraX;
-		data->rayDirY = data->dirY + data->planeY * data->cameraX;
-		//printf("%f\n", data->cameraX);
-		
-		data->mapX = data->rayPosX;
-		data->mapY = data->rayPosY;
-		
-		data->deltaDistX = sqrt(1 + (data->rayDirY * data->rayDirY) / (data->rayDirX * data->rayDirX));
-		data->deltaDistY = sqrt(1 + (data->rayDirX * data->rayDirX) / (data->rayDirY * data->rayDirY));
-		
+		data->camerax = 2 * data->x / WIN_WIDTH - 1;
+		data->rayposx = data->posx;
+		data->rayposy = data->posy;
+		data->raydirx = data->dirx + data->planex * data->camerax;
+		data->raydiry = data->diry + data->planey * data->camerax;
+		data->mapx = data->rayposx;
+		data->mapy = data->rayposy;
+		data->deltadistx = sqrt(1 + (data->raydiry * data->raydiry) /
+				(data->raydirx * data->raydirx));
+		data->deltadisty = sqrt(1 + (data->raydirx * data->raydirx) /
+				(data->raydiry * data->raydiry));
 		data->hit = 0;
-		
-		if (data->rayDirX < 0)
-		{
-			data->stepX = -1;
-			data->sideDistX = (data->rayPosX - data->mapX) * data->deltaDistX;
-		}
-		else
-		{
-			data->stepX = 1;
-			data->sideDistX = (data->mapX + 1.0 - data->rayPosX) * data->deltaDistX;
-		}
-		if (data->rayDirY < 0)
-		{
-			data->stepY = -1;
-			data->sideDistY = (data->rayPosY - data->mapY) * data->deltaDistY;
-		}
-		else
-		{
-			data->stepY = 1;
-			data->sideDistY = (data->mapY + 1.0 - data->rayPosY) * data->deltaDistY;
-		}
-
-		while (data->hit == 0)
-		{
-			//jump to next map square, OR in x-direction, OR in y-direction
-			if (data->sideDistX < data->sideDistY)
-			{
-				data->sideDistX += data->deltaDistX;
-				data->mapX += data->stepX;
-				data->side = 0;
-			}
-			else
-			{
-				data->sideDistY += data->deltaDistY;
-				data->mapY += data->stepY;
-				data->side = 1;
-			}
-			//Check if ray has hit a wall
-			//*(data + i * COLS + j)
-
-			//if (worldMap[data->mapX][data->mapY] > 0)
-			if (*(data->worldMap + data->mapX * mapWidth + data->mapY))
-				data->hit = 1;
-		}
-
-		if (data->side == 0)
-			data->perpWallDist = fabs((data->mapX - data->rayPosX + (1 - data->stepX) / 2) / data->rayDirX);
-		else
-			data->perpWallDist = fabs((data->mapY - data->rayPosY + (1 - data->stepY) / 2) / data->rayDirY);
-
-		data->lineHeight = fabs(win_height / data->perpWallDist);
-
-		data->drawStart = -data->lineHeight / 2 + win_height / 2;
-		if (data->drawStart < 0)
-			data->drawStart = 0;
-		data->drawEnd = data->lineHeight / 2 + win_height / 2;
-		if (data->drawEnd >= win_height)
-			data->drawEnd = win_height - 1;
-
-		//*(data + i * COLS + j)
-		//if (worldMap[data->mapX][data->mapY] == 1)
-		printf("[%f %f]", data->rayDirX, data->rayDirY);
-		
-		if (data->side)
-		{
-			if (data->rayDirY < 0)
-				data->colour = 0x00FF0000; //red
-			else
-				data->colour = 0x000000FF; //blue
-		}
-		else
-		{
-			if (data->rayDirX < 0)
-				data->colour = 0x00FFFF00; //yellow
-			else
-				data->colour = 0x0000FF00; //green
-		}
-
-		/*if (data->side && data->rayDirY < 0)
-			data->colour = 0x00FF0000; //red
-		else if (data->side && data->rayDirY > 0)
-			data->colour = 0x000000FF; //blue
-		else if (!data->side && data->rayDirX < 0)
-			data->colour = 0x00FFFF00; //yellow
-		else if (!data->side && data->rayDirX > 0)
-			data->colour = 0x0000FF00; //green*/
-		
-		/*if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 1)
-		{
-			//while(1);
-			data->colour = 0x00FF0000; //red
-		}
-		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 2)
-		{
-			//while(1);
-			data->colour = 0x0000FF00; //green
-			//if (data->x == 77) while(1);
-		}
-		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 3)
-		{
-			//while(1);
-			data->colour = 0x000000FF; //blue
-		}
-		else if (*(data->worldMap + data->mapX * mapHeight + data->mapY) == 4)
-		{
-			//while(1);
-			data->colour = 0x00FFFFFF; //white
-		}
-		else
-		{
-			//while(1);
-			data->colour = 0x00FFFF00; //yellow
-		}
-		
-		if (data->side == 1)
-			data->colour = data->colour / 2;*/
-
+		calc_pre_cast_values(data);
+		calc_ray_termination_location(data);
+		calc_ray_termination_distance_and_wall_size(data);
+		colour_picker(data);
 		draw_vert_line(data);
-
-		//if (data->x == 77) break;
-
-		
 		data->x++;
 	}
-
 }
 
-void update_with_up(t_data *data)
+void	update_with_up(t_data *data)
 {
-	//int *worldMap = data->worldMap;
-	//*(data + i * COLS + j)
-	//if(!*(worldMap[(int)(data->posX + data->dirX * moveSpeed)][(int)(data->posY)])
-	if (!*(data->worldMap + (int)(data->posX + data->dirX * moveSpeed) * mapWidth + (int)data->posY))	
-		data->posX += data->dirX * moveSpeed;
-	//if(!worldMap[(int)(data->posX)][(int)(data->posY + data->dirY * moveSpeed)])
-	if (!*(data->worldMap + (int)data->posX * mapWidth + (int)(data->posY + data->dirY * moveSpeed)))
-		data->posY += data->dirY * moveSpeed;
+	if (!*(data->worldmap + (int)(data->posx + data->dirx * MOVESPEED) *
+			data->colmax + (int)data->posy))
+		data->posx += data->dirx * MOVESPEED;
+	if (!*(data->worldmap + (int)data->posx * data->colmax + (int)(data->posy +
+			data->diry * MOVESPEED)))
+		data->posy += data->diry * MOVESPEED;
 	draw(data);
 }
 
-void update_with_left(t_data *data)
+void	update_with_left(t_data *data)
 {
-	//both camera direction and camera plane must be rotated
-	data->oldDirX = data->dirX;
-	data->dirX = data->dirX * cos(rotSpeed) - data->dirY * sin(rotSpeed);
-	data->dirY = data->oldDirX * sin(rotSpeed) + data->dirY * cos(rotSpeed);
-	data->oldPlaneX = data->planeX;
-	data->planeX = data->planeX * cos(rotSpeed) - data->planeY * sin(rotSpeed);
-	data->planeY = data->oldPlaneX * sin(rotSpeed) + data->planeY * cos(rotSpeed);
+	data->olddirx = data->dirx;
+	data->dirx = data->dirx * cos(ROTSPEED) - data->diry * sin(ROTSPEED);
+	data->diry = data->olddirx * sin(ROTSPEED) + data->diry * cos(ROTSPEED);
+	data->oldplanex = data->planex;
+	data->planex = data->planex * cos(ROTSPEED) - data->planey * sin(ROTSPEED);
+	data->planey = data->oldplanex * sin(ROTSPEED) + data->planey *
+			cos(ROTSPEED);
 	draw(data);
 }
 
-void update_with_down(t_data *data)
+void	update_with_down(t_data *data)
 {
-	//*(data + i * COLS + j)
-	//if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false)
-	if (*(data->worldMap + (int)(data->posX - data->dirX * moveSpeed) * mapWidth + (int)data->posY) == 0)
-		data->posX -= data->dirX * moveSpeed;
-	//if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false)
-	if (*(data->worldMap + (int)data->posX * mapWidth + (int)(data->posY - data->dirY * moveSpeed)) == 0)
-		data->posY -= data->dirY * moveSpeed;
+	if (*(data->worldmap + (int)(data->posx - data->dirx * MOVESPEED) *
+			data->colmax + (int)data->posy) == 0)
+		data->posx -= data->dirx * MOVESPEED;
+	if (*(data->worldmap + (int)data->posx * data->colmax + (int)(data->posy -
+			data->diry * MOVESPEED)) == 0)
+		data->posy -= data->diry * MOVESPEED;
 	draw(data);
 }
 
-void update_with_right(t_data *data)
+void	update_with_right(t_data *data)
 {
-	//both camera direction and camera plane must be rotated
-	data->oldDirX = data->dirX;
-	data->dirX = data->dirX * cos(-rotSpeed) - data->dirY * sin(-rotSpeed);
-	data->dirY = data->oldDirX * sin(-rotSpeed) + data->dirY * cos(-rotSpeed);
-	data->oldPlaneX = data->planeX;
-	data->planeX = data->planeX * cos(-rotSpeed) - data->planeY * sin(-rotSpeed);
-	data->planeY = data->oldPlaneX * sin(-rotSpeed) + data->planeY * cos(-rotSpeed);
+	data->olddirx = data->dirx;
+	data->dirx = data->dirx * cos(-ROTSPEED) - data->diry * sin(-ROTSPEED);
+	data->diry = data->olddirx * sin(-ROTSPEED) + data->diry * cos(-ROTSPEED);
+	data->oldplanex = data->planex;
+	data->planex = data->planex * cos(-ROTSPEED) - data->planey *
+		sin(-ROTSPEED);
+	data->planey = data->oldplanex * sin(-ROTSPEED) + data->planey *
+			cos(-ROTSPEED);
 	draw(data);
 }
 
-int key_event(int key_code, void *data)
+int	key_event(int key_code, void *data)
 {
 	if (key_code == 53)
-		exit (0);
-	else if (key_code == up)
+		exit(0);
+	else if (key_code == UP)
 		update_with_up(data);
-	else if (key_code == left)
+	else if (key_code == LEFT)
 		update_with_left(data);
-	else if (key_code == down)
+	else if (key_code == DOWN)
 		update_with_down(data);
-	else if (key_code == right)
+	else if (key_code == RIGHT)
 		update_with_right(data);
 	return (0);
 }
 
-int exit_hook(t_data *data)
+int	exit_hook(t_data *data)
 {
 	mlx_destroy_window(data->gsci, data->win);
 	exit(0);
 }
 
-int main()
+void	check_argc(int argc)
+{
+	if (argc != 2)
+	{
+		write(1, "Enter name of one map file\n", 27);
+		exit(0);
+	}
+}
+
+void	map_line_error(char *filename)
+{
+	ft_putstr("Map size inconsistent across lines of map file: ");
+	ft_putstr(filename);
+	ft_putchar('\n');
+	exit(0);
+}
+
+void	get_size_of_map(t_data *data)
+{
+	int		fd;
+	char	*pnl;
+	int		res;
+
+	if (!(fd = open(data->filename, O_RDONLY)) || fd == -1)
+	{
+		write(1, "File name not valid\n", 20);
+		exit(0);
+	}
+	res = 1;
+	while (res)
+	{
+		res = get_next_line(fd, &pnl);
+		if (ft_strlen(pnl))
+			data->rowmax++;
+		if (!data->colmax)
+			data->colmax = ft_getwcntsd(pnl, ' ');
+		else if (res)
+			if (ft_getwcntsd(pnl, ' ') != data->colmax)
+				map_line_error(data->filename);
+		free(pnl);
+	}
+	close(fd);
+}
+
+void	read_map(t_data *data)
+{
+	char		*pnl;
+	char		**one_line_fields;
+	t_read_map	read_map;
+
+	read_map.i = -1;
+	read_map.j = 0;
+	read_map.fd = open(data->filename, O_RDONLY);
+	read_map.res = 1;
+	while (read_map.res && ++read_map.i < data->rowmax)
+	{
+		read_map.j = 0;
+		read_map.res = get_next_line(read_map.fd, &pnl);
+		one_line_fields = ft_strsplit(pnl, ' ');
+		while (*one_line_fields != NULL && read_map.j < data->colmax)
+		{
+			*(data->worldmap + read_map.i * data->colmax + read_map.j) =
+					ft_atoi(one_line_fields[read_map.j]);
+			free(one_line_fields[read_map.j++]);
+		}
+		free(pnl);
+		free(one_line_fields);
+	}
+}
+
+void	create_world(t_data *data)
+{
+	int i;
+
+	check_argc(data->argc);
+	get_size_of_map(data);
+	i = 0;
+	data->worldmap = (int*)ft_memalloc(sizeof(int) * data->rowmax *
+			data->colmax);
+	while (i < data->rowmax)
+	{
+		data->worldmap[i] = (*data->worldmap + data->colmax * i);
+		i++;
+	}
+	read_map(data);
+}
+
+t_data	*create_data(int argc, char **argv)
 {
 	t_data *data;
-	data = init_t_data();
-	int worldMap[mapWidth][mapHeight] =
-	{
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-	{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-	};
-	
-	data->worldMap = &worldMap[0][0];
 
-	
-	
-	data->posX = 22;
-	data->posY = 12;
-	data->dirX = -1;
-	data->dirY = 0;
-	data->planeX = 0;
-	data->planeY = 0.66;
-	
+	data = ft_memalloc(sizeof(t_data));
+	data->posx = 22;
+	data->posy = 12;
+	data->dirx = -1;
+	data->diry = 0;
+	data->planex = 0;
+	data->planey = 0.66;
+	data->argc = argc;
+	data->filename = argv[1];
+	create_world(data);
+	return (data);
+}
+
+int	main(int argc, char **argv)
+{
+	t_data *data;
+
+	data = create_data(argc, argv);
 	set_up_window(data);
-	
 	draw(data);
-	
-//	mlx_key_hook(data->win, key_event, data);
 	mlx_hook(data->win, 2, 0, key_event, data);
 	mlx_hook(data->win, 17, 0, exit_hook, data);
 	mlx_loop(data->gsci);
-	return (0);
-	
 }

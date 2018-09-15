@@ -6,7 +6,7 @@
 #    By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/28 19:12:59 by revan-wy          #+#    #+#              #
-#    Updated: 2018/09/13 19:06:34 by revan-wy         ###   ########.fr        #
+#    Updated: 2018/09/15 20:54:41 by revan-wy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@ NAME = wolf
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 COMP = $(CC) $(FLAGS)
-#INCL = -I ./
 FRAMEWORK = -framework OpenGL \
 			-framework AppKit
 LIBFT_H = -I ./libft/
