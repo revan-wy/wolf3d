@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 09:51:43 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/16 10:47:22 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/16 11:27:08 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	create_world(t_data *data)
 	read_map(data);
 }
 
-int	main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	t_data *data;
 

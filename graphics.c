@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/16 10:35:01 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/16 10:45:57 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/16 11:28:50 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	draw_vert_line(t_data *data)
 		mlx_pixel_put(data->gsci, data->win, data->x, y++, data->colour);
 }
 
-int	exit_hook(t_data *data)
+int		exit_hook(t_data *data)
 {
 	mlx_destroy_window(data->gsci, data->win);
 	exit(0);
@@ -60,4 +60,3 @@ void	set_up_window(t_data *data)
 	data->win = mlx_new_window(data->gsci, WIN_WIDTH, WIN_HEIGHT,
 			"#iamwolfhearmehowl");
 }
-

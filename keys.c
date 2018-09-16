@@ -6,13 +6,13 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/16 10:42:21 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/16 10:47:00 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/16 11:28:03 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-int	key_event(int key_code, void *data)
+int		key_event(int key_code, void *data)
 {
 	if (key_code == 53)
 		exit(0);
@@ -73,4 +73,3 @@ void	update_with_right(t_data *data)
 			cos(-ROTSPEED);
 	draw(data);
 }
-
