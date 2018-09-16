@@ -6,7 +6,7 @@
 #    By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/28 19:12:59 by revan-wy          #+#    #+#              #
-#    Updated: 2018/09/15 20:54:41 by revan-wy         ###   ########.fr        #
+#    Updated: 2018/09/16 10:29:44 by revan-wy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,11 @@ FRAMEWORK = -framework OpenGL \
 LIBFT_H = -I ./libft/
 LIBS = -L./libft -lft \
 	   -lmlx
-SRC = wolf.c
+SRC = calculations.c \
+	  graphics.c \
+	  keys.c \
+	  map_functions.c \
+	  wolf.c
 
 OBJ := $(SRC:%.c=%.o)
 

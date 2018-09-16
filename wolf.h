@@ -6,7 +6,7 @@
 /*   By: revan-wy <revan-wy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/09 15:09:16 by revan-wy          #+#    #+#             */
-/*   Updated: 2018/09/15 22:08:45 by revan-wy         ###   ########.fr       */
+/*   Updated: 2018/09/16 10:25:35 by revan-wy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,34 @@ typedef struct s_read_map
 	int i;
 	int j;
 } t_read_map;
+
+//calculations.c
+void	calc_pre_cast_values(t_data *data);
+void	calc_ray_termination_distance_and_wall_size(t_data *data);
+void	calc_ray_termination_location(t_data *data);
+void	colour_picker(t_data *data);
+
+//wolf.c
+void	check_argc(int argc);
+t_data	*create_data(int argc, char **argv);
+void	create_world(t_data *data);
+
+//graphics.c
+void	draw(t_data *data);
+void	draw_vert_line(t_data *data);
+void	set_up_window(t_data *data);
+int		exit_hook(t_data *data);
+
+//map_functions.c
+void	map_line_error(char *filename);
+void	get_size_of_map(t_data *data);
+void	read_map(t_data *data);
+
+//keys.c
+int		key_event(int key_code, void *data);
+void	update_with_down(t_data *data);
+void	update_with_left(t_data *data);
+void	update_with_up(t_data *data);
+void	update_with_right(t_data *data);
 
 #endif

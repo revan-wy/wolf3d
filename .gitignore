@@ -78,3 +78,7 @@ wolf.o
 wolf
 test/2d_int_via_ptr/a.out
 wolf.dSYM/Contents/Info.plist
+map_functions.o
+keys.o
+graphics.o
+calculations.o
