@@ -2,8 +2,7 @@ libft/libft.a
 rayCaster.out
 demo.gif
 _gitignore
-README.md
-.DS_Store
+*.DS_Store
 wolf
 test/2d_int_via_ptr/a.out
 wolf.dSYM/Contents/Info.plist
